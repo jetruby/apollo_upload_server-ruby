@@ -1,6 +1,6 @@
 # ApolloUploadServer
 
-Middleware which allows you to upload files using [graphql-ruby](https://github.com/rmosolgo/graphql-ruby), [apoll-upload-client](https://github.com/jaydenseric/apollo-upload-client) and Ruby on Rails.
+Middleware which allows you to upload files using [graphql-ruby](https://github.com/rmosolgo/graphql-ruby), [apollo-upload-client](https://github.com/jaydenseric/apollo-upload-client) and Ruby on Rails.
 
 ## Installation
 
