@@ -2,6 +2,8 @@
 
 Middleware which allows you to upload files using [graphql-ruby](https://github.com/rmosolgo/graphql-ruby), [apollo-upload-client](https://github.com/jaydenseric/apollo-upload-client) and Ruby on Rails.
 
+Note: this implementation uses [v1 of the GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec/tree/v1.0.0), so you should use apollo-upload-client library v5.1.1.
+
 ## Installation
 
 Add this line to your application's Gemfile:
