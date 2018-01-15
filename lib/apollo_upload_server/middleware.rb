@@ -8,8 +8,7 @@ module ApolloUploadServer
 
     def call(env)
       request = ActionDispatch::Request.new(env)
-
-      if env['CONTENT_TYPE'].to_s.include?('multipart/form-data') && request.params['operations'].present?
+      if env['CONTENT_TYPE'].to_s.include?('multipart/form-data') && request.params['operations'].present? && request.params['map'].present?
         request.update_param('_json', GraphQLDataBuilder.new.call(request.params))
       end
 

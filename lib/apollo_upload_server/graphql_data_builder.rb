@@ -1,52 +1,35 @@
 require 'json'
-require 'active_support'
 
 module ApolloUploadServer
   class GraphQLDataBuilder
     def call(params)
-      operations = begin
-                     JSON.parse(params['operations'])
-                   rescue JSON::ParserError
-                     nil
-                   end
-      return unless operations.is_a?(Array)
+      operations = safe_json_parse(params['operations'])
+      file_mapper = safe_json_parse(params['map'])
 
-      files = transform(convert_to_hash(select_files(params)))
-      operations.zip(files).map do |data, file|
-        if file.nil?
-          data
-        else
-          data.deep_merge(file)
+      return nil if operations.nil? || file_mapper.nil?
+      single_operation = operations.is_a?(Hash)
+      file_mapper.to_a.each do |file_index, paths|
+        paths.each do |path|
+          splited_path = path.split('.')
+          if single_operation
+            # splited_path => 'variables.input.profile_photo'; splited_path[0..-2] => ['variables', 'input']
+            # dig from first to penultimate key, and merge last key with value as file
+            operations.dig(*splited_path[0..-2]).merge!(splited_path.last => params[file_index])
+          else
+            # dig from second to penultimate key, and merge last key with value as file to operation with first key index
+            operations[splited_path.first.to_i].dig(*splited_path[1..-2]).merge!(splited_path.last => params[file_index])
+          end
         end
       end
+      single_operation ? [operations] : operations
     end
 
     private
 
-    def select_files(params)
-      params.select do |key, _value|
-        key.include?('.variables') # && value.is_a?(ActionDispatch::Http::UploadedFile)
-      end
-    end
-
-    def convert_to_hash(params)
-      params.reduce({}) do |memo, (key, value)|
-        memo.deep_merge(key.split('.').reverse.inject(value) { |hash, name| { name => hash } })
-      end
-    end
-
-    def transform(hash)
-      if hash.is_a?(Hash)
-        if hash.keys.all? { |key| key.to_i.to_s == key }
-          hash.keys.each_with_object([]) do |index, memo|
-            memo[index.to_i] = transform(hash[index])
-          end
-        else
-          hash.map { |k, v| [k, transform(v)] }.to_h
-        end
-      else
-        hash
-      end
+    def safe_json_parse(data)
+      JSON.parse(data)
+    rescue JSON::ParserError
+      nil
     end
   end
 end

@@ -1,3 +1,3 @@
 module ApolloUploadServer
-  VERSION = '1.0.0'.freeze
+  VERSION = '2.0.0.alpha.1'.freeze
 end
