@@ -7,24 +7,39 @@ module ApolloUploadServer
       file_mapper = safe_json_parse(params['map'])
 
       return nil if operations.nil? || file_mapper.nil?
-      single_operation = operations.is_a?(Hash)
-      file_mapper.to_a.each do |file_index, paths|
-        paths.each do |path|
-          splited_path = path.split('.')
-          if single_operation
-            # splited_path => 'variables.input.profile_photo'; splited_path[0..-2] => ['variables', 'input']
-            # dig from first to penultimate key, and merge last key with value as file
-            operations.dig(*splited_path[0..-2]).merge!(splited_path.last => params[file_index])
-          else
-            # dig from second to penultimate key, and merge last key with value as file to operation with first key index
-            operations[splited_path.first.to_i].dig(*splited_path[1..-2]).merge!(splited_path.last => params[file_index])
-          end
-        end
+      if operations.is_a?(Hash)
+        single_transformation(file_mapper, operations, params)
+      else
+        { '_json' => multiple_transformation(file_mapper, operations, params) }
       end
-      single_operation ? [operations] : operations
     end
 
     private
+
+    def single_transformation(file_mapper, operations, params)
+      operations = operations.dup
+      file_mapper.each do |file_index, paths|
+        paths.each do |path|
+          splited_path = path.split('.')
+            # splited_path => 'variables.input.profile_photo'; splited_path[0..-2] => ['variables', 'input']
+            # dig from first to penultimate key, and merge last key with value as file
+            operations.dig(*splited_path[0..-2]).merge!(splited_path.last => params[file_index])
+        end
+      end
+      operations
+    end
+
+    def multiple_transformation(file_mapper, operations, params)
+      operations = operations.dup
+      file_mapper.each do |file_index, paths|
+        paths.each do |path|
+          splited_path = path.split('.')
+            # dig from second to penultimate key, and merge last key with value as file to operation with first key index
+            operations[splited_path.first.to_i].dig(*splited_path[1..-2]).merge!(splited_path.last => params[file_index])
+        end
+      end
+      operations
+    end
 
     def safe_json_parse(data)
       JSON.parse(data)

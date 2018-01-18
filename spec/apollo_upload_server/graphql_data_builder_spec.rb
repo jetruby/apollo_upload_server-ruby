@@ -8,21 +8,19 @@ describe ApolloUploadServer::GraphQLDataBuilder do
         'operations' => {
           'query' => 'mutation { blah blah }',
           'operationName' => 'SomeOperation',
-          'variables' => { 'input' => { 'id' => '123' } }
+          'variables' => { 'input' => { 'id' => '123', 'model' => {} } }
         }.to_json,
-        'map' => { '0' => ['variables.input.avatar'] }.to_json,
+        'map' => { '0' => ['variables.input.avatar', 'variables.input.model.avatar'] }.to_json,
         '0' => :file0
       }
     end
 
     let(:expected_params) do
-      [
-        {
-          'query' => 'mutation { blah blah }',
-          'operationName' => 'SomeOperation',
-          'variables' => { 'input' => { 'id' => '123', 'avatar' => :file0 } }
-        }
-      ]
+      {
+        'query' => 'mutation { blah blah }',
+        'operationName' => 'SomeOperation',
+        'variables' => { 'input' => { 'id' => '123', 'avatar' => :file0, 'model' => { 'avatar' => :file0 } } }
+      }
     end
 
     specify do
@@ -54,7 +52,7 @@ describe ApolloUploadServer::GraphQLDataBuilder do
     end
 
     let(:expected_params) do
-      [
+      {'_json' => [
         {
           'query' => 'mutation { blah blah1 }',
           'operationName' => nil,
@@ -70,7 +68,7 @@ describe ApolloUploadServer::GraphQLDataBuilder do
           'operationName' => 'Some_Operation',
           'hashKeyA' => { 'hashKeyB' => { 'id' => '123', 'hashKeyC' => :file0 } }
         }
-      ]
+      ]}
     end
 
     specify do
@@ -94,10 +92,10 @@ describe ApolloUploadServer::GraphQLDataBuilder do
                          {
                            'query' => 'mutation { blah blah3 }',
                            'operationName' => 'Some_Operation',
-                           'hashKeyA' => { 'hashKeyB' => { 'id' => '123' } }
+                           'hashKeyA' => { 'hashKeyB' => { 'id' => '123', 'model' => { 'id' => '23' } } }
                          }].to_json,
         'map' => { '0' => ['0.variables.input.avatar', '2.hashKeyA.hashKeyB.hashKeyC', '2.hashKeyA.hashKeyB.file0'],
-                   '2' => ['0.variables.input.file2', '1.variables.input.profile_photo'] }.to_json,
+                   '2' => ['0.variables.input.file2', '1.variables.input.profile_photo', '2.hashKeyA.hashKeyB.model.photo'] }.to_json,
         '0' => :file0,
         '1' => :file1,
         '2' => :file2
@@ -105,7 +103,7 @@ describe ApolloUploadServer::GraphQLDataBuilder do
     end
 
     let(:expected_params) do
-      [
+      {'_json' => [
         {
           'query' => 'mutation { blah blah1 }',
           'operationName' => nil,
@@ -119,9 +117,9 @@ describe ApolloUploadServer::GraphQLDataBuilder do
         {
           'query' => 'mutation { blah blah3 }',
           'operationName' => 'Some_Operation',
-          'hashKeyA' => { 'hashKeyB' => { 'id' => '123', 'hashKeyC' => :file0, 'file0' => :file0 } }
+          'hashKeyA' => { 'hashKeyB' => { 'id' => '123', 'model' => { 'id' => '23', 'photo' => :file2 }, 'hashKeyC' => :file0, 'file0' => :file0 } }
         }
-      ]
+      ] }
     end
 
     specify do
