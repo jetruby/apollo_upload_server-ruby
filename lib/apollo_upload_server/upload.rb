@@ -1,3 +1,5 @@
+require 'graphql'
+
 module ApolloUploadServer
   Upload = GraphQL::ScalarType.define do
     name 'Upload'
