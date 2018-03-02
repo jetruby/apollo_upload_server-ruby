@@ -21,9 +21,14 @@ module ApolloUploadServer
       file_mapper.each do |file_index, paths|
         paths.each do |path|
           splited_path = path.split('.')
-            # splited_path => 'variables.input.profile_photo'; splited_path[0..-2] => ['variables', 'input']
-            # dig from first to penultimate key, and merge last key with value as file
-            operations.dig(*splited_path[0..-2]).merge!(splited_path.last => params[file_index])
+          # splited_path => 'variables.input.profile_photo'; splited_path[0..-2] => ['variables', 'input']
+          # dig from first to penultimate key, and merge last key with value as file
+          field = operations.dig(*splited_path[0..-2])
+          if field.is_a? Hash
+            field.merge!(splited_path.last => params[file_index])
+          elsif field.is_a? Array
+            field[splited_path[-1].to_i] = params[file_index]
+          end
         end
       end
       operations
