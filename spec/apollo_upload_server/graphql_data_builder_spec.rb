@@ -152,4 +152,43 @@ describe ApolloUploadServer::GraphQLDataBuilder do
       expect(described_class.new.call(params)).to eq(expected_params)
     end
   end
+
+  describe '#call for multiple operations with multiple files' do
+    let(:params) do
+      {
+        'operations' => [{
+            'query' => 'mutation { blah blah1 }',
+            'operationName' => nil,
+            'variables' => { 'input' => { 'id' => '123', 'avatars' => [nil] } }
+          },
+          {
+            'query' => 'mutation { blah blah2 }',
+            'operationName' => 'hashKeyCzaza',
+            'variables' => { 'input' => { 'id' => '123', 'avatars' => [nil] } }
+          }
+        ].to_json,
+        'map' => { '0' => ['0.variables.input.avatars.0', '1.variables.input.avatars.0'] }.to_json,
+        '0' => :file0
+      }
+    end
+
+    let(:expected_params) do
+      {'_json' => [
+        {
+          'query' => 'mutation { blah blah1 }',
+          'operationName' => nil,
+          'variables' => { 'input' => { 'id' => '123', 'avatars' => [:file0] } }
+        },
+        {
+          'query' => 'mutation { blah blah2 }',
+          'operationName' => 'hashKeyCzaza',
+          'variables' => { 'input' => { 'id' => '123', 'avatars' => [:file0] } }
+        }
+      ]}
+    end
+
+    specify do
+      expect(described_class.new.call(params)).to eq(expected_params)
+    end
+  end
 end
