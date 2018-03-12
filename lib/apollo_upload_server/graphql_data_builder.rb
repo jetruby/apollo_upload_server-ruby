@@ -23,7 +23,8 @@ module ApolloUploadServer
           splited_path = path.split('.')
           # splited_path => 'variables.input.profile_photo'; splited_path[0..-2] => ['variables', 'input']
           # dig from first to penultimate key, and merge last key with value as file
-          field = operations.dig(*splited_path[0..-2])
+
+          field = get_parent_field(operations, splited_path)
           assign_file(field, splited_path, params[file_index])
         end
       end
@@ -48,6 +49,20 @@ module ApolloUploadServer
     rescue JSON::ParserError
       nil
     end
+
+    def get_parent_field(operations, splited_path)
+      # returns parent element of file field
+
+      splited_path[0..-2].inject(operations) do |element, key|
+        case element
+        when Array
+          element[Integer(key)]
+        else
+          element[key]
+        end
+      end
+    end
+
 
     def assign_file(field, splited_path, file)
       if field.is_a? Hash
