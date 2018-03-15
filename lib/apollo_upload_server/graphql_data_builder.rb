@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'json'
+require 'apollo_upload_server/wrappers/uploaded_file'
 
 module ApolloUploadServer
   class GraphQLDataBuilder
@@ -65,10 +68,12 @@ module ApolloUploadServer
 
 
     def assign_file(field, splited_path, file)
+      wrapped_file = Wrappers::UploadedFile.new(file)
+
       if field.is_a? Hash
-        field.merge!(splited_path.last => file)
+        field.merge!(splited_path.last => wrapped_file)
       elsif field.is_a? Array
-        field[splited_path.last.to_i] = file
+        field[splited_path.last.to_i] = wrapped_file
       end
     end
   end
