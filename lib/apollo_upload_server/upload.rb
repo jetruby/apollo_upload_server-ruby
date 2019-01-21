@@ -3,10 +3,15 @@
 require 'graphql'
 
 module ApolloUploadServer
-  Upload = GraphQL::ScalarType.define do
-    name 'Upload'
+  class Upload < GraphQL::Schema::Scalar
+    graphql_name "Upload"
 
-    coerce_input ->(value, _ctx) { value }
-    coerce_result ->(value, _ctx) { value }
+    def self.coerce_input(value, _ctx)
+      value
+    end
+
+    def self.coerse_result(value, _ctx)
+      value
+    end
   end
 end
