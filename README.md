@@ -9,7 +9,7 @@ use [version 1.0.0](https://github.com/jetruby/apollo_upload_server-ruby/tree/1.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'apollo_upload_server', '2.0.0.beta.2'
+gem 'apollo_upload_server', '2.0.0.beta.3'
 ```
 
 And then execute:
