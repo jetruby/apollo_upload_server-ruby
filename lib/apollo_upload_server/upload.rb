@@ -10,7 +10,7 @@ module ApolloUploadServer
       value
     end
 
-    def self.coerse_result(value, _ctx)
+    def self.coerce_result(value, _ctx)
       value
     end
   end
