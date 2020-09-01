@@ -10,6 +10,7 @@ RSpec.describe ApolloUploadServer::Upload do
     specify do
       expect(described_class.coerce_input(uploaded_file, ctx)).to eq(uploaded_file)
       expect { described_class.coerce_input('test', ctx) }.to raise_error(GraphQL::CoercionError)
+      expect(described_class.coerce_input(nil, ctx)).to eq(nil)
     end
   end
 
