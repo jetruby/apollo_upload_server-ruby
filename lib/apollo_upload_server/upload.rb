@@ -7,7 +7,7 @@ module ApolloUploadServer
     graphql_name "Upload"
 
     def self.coerce_input(value, _ctx)
-      raise GraphQL::CoercionError, "#{value.inspect} is not a valid upload" unless value.is_a?(::ApolloUploadServer::Wrappers::UploadedFile)
+      raise GraphQL::CoercionError, "#{value.inspect} is not a valid upload" unless value.nil? || value.is_a?(::ApolloUploadServer::Wrappers::UploadedFile)
 
       value
     end
