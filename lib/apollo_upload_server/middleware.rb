@@ -20,6 +20,8 @@ module ApolloUploadServer
           request.update_param(key, value)
         end
       end
+
+      @app.call(env)
     end
   end
 end
