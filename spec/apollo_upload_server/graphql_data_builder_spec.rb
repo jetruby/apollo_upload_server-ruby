@@ -52,6 +52,66 @@ describe ApolloUploadServer::GraphQLDataBuilder do
     specify do
       expect(described_class.new.call(params)).to eq(expected_params)
     end
+
+    context 'when the index is not a string' do
+      let(:params) do
+        {
+          'operations' => {
+            'query' => 'mutation { blah blah }',
+            'operationName' => 'SomeOperation',
+            'variables' => { 'input' => { 'id' => '123', 'avatars' => [nil], 'model' => { 'avatars' => [nil] } } }
+          }.to_json,
+          'map' => { '0' => ['variables.input.avatars.foo', 'variables.input.model.avatars.0'] }.to_json,
+          '0' => :file0
+        }
+      end
+
+      specify do
+        expect(described_class.new.call(params)).to eq(expected_params)
+      end
+
+      it 'is rejected in strict mode' do
+        expect do
+          described_class.new(strict_mode: true).call(params)
+        end.to raise_error(described_class::OutOfBounds)
+      end
+    end
+
+    context 'when the array is empty' do
+      let(:params) do
+        {
+          'operations' => {
+            'query' => 'mutation { blah blah }',
+            'operationName' => 'SomeOperation',
+            'variables' => { 'input' => { 'id' => '123', 'avatars' => [], 'model' => { 'avatars' => [nil] } } }
+          }.to_json,
+          'map' => { '0' => ['variables.input.avatars.0', 'variables.input.model.avatars.0'] }.to_json,
+          '0' => :file0
+        }
+      end
+
+      let(:expected_params) do
+        {
+          'query' => 'mutation { blah blah }',
+          'operationName' => 'SomeOperation',
+          'variables' => { 'input' => { 'id' => '123', 'avatars' => [:file0], 'model' => { 'avatars' => [:file0] } } }
+        }
+      end
+
+      specify do
+        expect(described_class.new.call(params)).to eq(expected_params)
+      end
+
+      it 'accepts this input in lax mode' do
+        expect(described_class.new.call(params)).to eq(expected_params)
+      end
+
+      it 'rejects this input in strict mode' do
+        expect do
+          described_class.new(strict_mode: true).call(params)
+        end.to raise_error(described_class::OutOfBounds)
+      end
+    end
   end
 
   describe '#call for multiple operations' do

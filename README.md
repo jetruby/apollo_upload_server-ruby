@@ -4,12 +4,13 @@ Middleware which allows you to upload files using [graphql-ruby](https://github.
 
 Note: this implementation uses [v2 of the GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec/tree/v2.0.0-alpha.2), so you should use apollo-upload-client library >= v7.0.0-alpha.3. If you need support for [v1 of the GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec/tree/v1.0.0), you must
 use [version 1.0.0](https://github.com/jetruby/apollo_upload_server-ruby/tree/1.0.0) of this gem.
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'apollo_upload_server', '2.0.5'
+gem 'apollo_upload_server', '2.1.0'
 ```
 
 And then execute:
@@ -24,11 +25,44 @@ Middleware will be used automatically.
 
 Gem adds custom `Upload` type to your GraphQL types.
 Use `ApolloUploadServer::Upload` type for your file as input field:
+
 ```ruby
   input_field :file, ApolloUploadServer::Upload
 ```
 
 That's all folks!
+
+## Configuration
+
+The following configuration options are supported:
+
+### Strict Mode
+
+This can be set on `ApolloUploadServer::Middleware`:
+
+```ruby
+ApolloUploadServer::Middleware.strict_mode = true
+```
+
+Doing so ensures that all mapped array values are present in the input. If this
+is set to `true`, then for following request:
+
+```json
+{
+  "operations": {
+    "query": "mutation { ... }",
+    "operationName": "SomeOperation",
+    "variables": {
+      "input": { "id": "123", "avatars": [null, null] }
+    }
+  }
+}
+```
+
+A mapping for `variables.input.avatars.0` or `variables.input.avatars.1`, will work, but one for
+`variables.input.avatars.100` will not, and will raise an error.
+
+In strict mode, passing empty destination arrays will always fail.
 
 ## Contributing
 
@@ -43,6 +77,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 Everyone interacting in the ApolloUploadServer project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/jetruby/apollo_upload_server-ruby/blob/master/CODE_OF_CONDUCT.md).
 
 ## About JetRuby
+
 ApolloUploadServer is maintained and founded by JetRuby Agency.
 
 We love open source software!
