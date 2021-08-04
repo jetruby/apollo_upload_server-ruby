@@ -30,6 +30,38 @@ Use `ApolloUploadServer::Upload` type for your file as input field:
 
 That's all folks!
 
+## Configuration
+
+The following configuration options are supported:
+
+### Strict Mode
+
+This can be set on `ApolloUploadServer::Middleware`:
+
+```ruby
+ApolloUploadServer::Middleware.strict_mode = true
+```
+
+Doing so ensures that all mapped array values are present in the input. If this
+is set to `true`, then for following request:
+
+```json
+{
+  "operations": {
+    "query": "mutation { ... }",
+    "operationName": "SomeOperation",
+    "variables": {
+      "input": { "id": "123", "avatars": [null, null] }
+    }
+  }
+}
+```
+
+A mapping for `variables.input.avatars.0` or `variables.input.avatars.1`, will work, but one for
+`variables.input.avatars.100` will not, and will raise an error.
+
+In strict mode, passing empty destination arrays will always fail.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/jetruby/apollo_upload_server-ruby. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
