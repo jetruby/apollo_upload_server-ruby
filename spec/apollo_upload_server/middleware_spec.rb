@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'action_dispatch'
+require 'rack'
 require 'apollo_upload_server/middleware'
 
 describe ApolloUploadServer::Middleware do
