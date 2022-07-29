@@ -18,11 +18,10 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'rack', '>= 2.2.1'
-  spec.add_dependency 'graphql', '>= 1.8'
-  spec.add_dependency 'activesupport', '>= 7.0.3.1'
+  spec.add_dependency 'rack'
+  spec.add_dependency 'graphql'
 
-  spec.add_development_dependency 'bundler', '~> 2.1'
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rspec', '~> 3.5'
+  spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec'
 end

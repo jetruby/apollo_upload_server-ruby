@@ -1,15 +1,9 @@
 require 'apollo_upload_server/graphql_data_builder'
-require "active_support/configurable"
 require 'rack'
 
 module ApolloUploadServer
   class Middleware
-    include ActiveSupport::Configurable
-
-    # Strict mode requires that all mapped files are present in the mapping arrays.
-    config_accessor :strict_mode do
-      false
-    end
+    attr_accessor :strict_mode
 
     def initialize(app)
       @app = app
@@ -23,7 +17,7 @@ module ApolloUploadServer
       request = Rack::Request.new(env)
       params = request.params
 
-      if params['operations'].present? && params['map'].present?
+      if (params['operation']&.length&.> 0) && (params['map']&.length&.> 0)
         result = GraphQLDataBuilder.new(strict_mode: self.class.strict_mode).call(request.params)
         result&.each do |key, value|
           request.update_param(key, value)
@@ -31,6 +25,10 @@ module ApolloUploadServer
       end
 
       @app.call(env)
+    end
+
+    class << self
+      attr_accessor :strict_mode
     end
   end
 end
