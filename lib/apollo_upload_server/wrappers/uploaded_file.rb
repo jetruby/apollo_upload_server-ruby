@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 require 'delegate'
-require 'action_dispatch/http/upload'
+require 'rack'
 
 module ApolloUploadServer
   module Wrappers
-    class UploadedFile < DelegateClass(::ActionDispatch::Http::UploadedFile)
+    class UploadedFile < DelegateClass(Rack::Multipart::UploadedFile)
       def initialize(wrapped_foo)
         super
       end
