@@ -6,3 +6,7 @@
 /pkg/
 /spec/reports/
 /tmp/
+
+# IntelliJ
+.idea/
+*.iml
