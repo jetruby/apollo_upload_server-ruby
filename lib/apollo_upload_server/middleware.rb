@@ -1,6 +1,5 @@
 require 'apollo_upload_server/graphql_data_builder'
 require "active_support/configurable"
-require 'rack'
 
 module ApolloUploadServer
   class Middleware
@@ -20,7 +19,7 @@ module ApolloUploadServer
         return @app.call(env)
       end
 
-      request = Rack::Request.new(env)
+      request = ActionDispatch::Request.new(env)
       params = request.params
 
       if params['operations'].present? && params['map'].present?
