@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'actionpack', '>=7.0.3.1'
+  spec.add_dependency 'actionpack', '>= 6.1.6'
   spec.add_dependency 'graphql', '>= 1.8'
 
   spec.add_development_dependency 'bundler', '~> 2.1'
