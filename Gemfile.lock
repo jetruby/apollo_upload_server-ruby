@@ -1,27 +1,27 @@
 PATH
   remote: .
   specs:
-    apollo_upload_server (2.1.4)
+    apollo_upload_server (2.1.5)
       actionpack (>= 6.1.6)
       graphql (>= 1.8)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    actionpack (7.0.3.1)
-      actionview (= 7.0.3.1)
-      activesupport (= 7.0.3.1)
+    actionpack (7.0.4)
+      actionview (= 7.0.4)
+      activesupport (= 7.0.4)
       rack (~> 2.0, >= 2.2.0)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (7.0.3.1)
-      activesupport (= 7.0.3.1)
+    actionview (7.0.4)
+      activesupport (= 7.0.4)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activesupport (7.0.3.1)
+    activesupport (7.0.4)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -31,15 +31,15 @@ GEM
     crass (1.0.6)
     diff-lcs (1.5.0)
     erubi (1.11.0)
-    graphql (2.0.13)
+    graphql (2.0.15)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mini_portile2 (2.8.0)
     minitest (5.16.3)
-    nokogiri (1.13.8)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     racc (1.6.0)
@@ -75,7 +75,7 @@ DEPENDENCIES
   apollo_upload_server!
   bundler (~> 2.1)
   rake (~> 13.0)
-  rspec (~> 3.5)
+  rspec (~> 3.11)
 
 BUNDLED WITH
    2.3.17
