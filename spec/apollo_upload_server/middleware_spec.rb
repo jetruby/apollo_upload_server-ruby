@@ -43,6 +43,8 @@ describe ApolloUploadServer::Middleware do
       end
 
       it 'propagates this setting to the data builder' do
+        expect(ApolloUploadServer::GraphQLDataBuilder).to receive(:new).with(strict_mode: true).and_call_original
+
         subject
       end
     end
