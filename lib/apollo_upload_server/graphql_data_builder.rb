@@ -65,7 +65,7 @@ module ApolloUploadServer
     def safe_json_parse(data)
       JSON.parse(data)
     rescue JSON::ParserError
-      nil
+      raise JSON::ParserError, "Malformed JSON in multipart form data"
     end
 
     def get_parent_field(operations, splited_path)
