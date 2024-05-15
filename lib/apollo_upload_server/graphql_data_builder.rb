@@ -12,8 +12,8 @@ module ApolloUploadServer
     end
 
     def call(params)
-      operations = safe_json_parse(params['operations'])
-      file_mapper = safe_json_parse(params['map'])
+      operations = JSON.parse(params['operations'])
+      file_mapper = JSON.parse(params['map'])
 
       return nil if operations.nil? || file_mapper.nil?
       if operations.is_a?(Hash)
@@ -60,12 +60,6 @@ module ApolloUploadServer
       return if 0 <= index && index < size
 
       raise OutOfBounds, "Path #{path.join('.')} maps to out-of-bounds index: #{index}"
-    end
-
-    def safe_json_parse(data)
-      JSON.parse(data)
-    rescue JSON::ParserError
-      raise JSON::ParserError, "Malformed JSON in multipart form data"
     end
 
     def get_parent_field(operations, splited_path)
