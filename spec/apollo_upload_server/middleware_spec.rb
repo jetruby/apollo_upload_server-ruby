@@ -19,7 +19,7 @@ describe ApolloUploadServer::Middleware do
 
     context "when CONTENT_TYPE is 'multipart/form-data'" do
       subject do
-        Rack::MockRequest.new(app).post('/', { 'CONTENT_TYPE' => 'multipart/form-data', input: 'operations=foo&map=bar' })
+        Rack::MockRequest.new(app).post('/', { 'CONTENT_TYPE' => 'multipart/form-data', input: 'operations={}&map={}' })
       end
 
       it { expect(subject.status).to eq(200) }
@@ -39,7 +39,7 @@ describe ApolloUploadServer::Middleware do
       end
 
       subject do
-        Rack::MockRequest.new(app).post('/', { 'CONTENT_TYPE' => 'multipart/form-data', input: 'operations=foo&map=bar' })
+        Rack::MockRequest.new(app).post('/', { 'CONTENT_TYPE' => 'multipart/form-data', input: 'operations={}&map={}' })
       end
 
       it 'propagates this setting to the data builder' do
