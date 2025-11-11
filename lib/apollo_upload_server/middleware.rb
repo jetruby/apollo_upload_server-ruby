@@ -1,14 +1,9 @@
 require 'apollo_upload_server/graphql_data_builder'
-require "active_support/configurable"
 
 module ApolloUploadServer
   class Middleware
-    include ActiveSupport::Configurable
-
     # Strict mode requires that all mapped files are present in the mapping arrays.
-    config_accessor :strict_mode do
-      false
-    end
+    class_attribute :strict_mode, default: false
 
     def initialize(app)
       @app = app
