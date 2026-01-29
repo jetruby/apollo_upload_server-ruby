@@ -27,7 +27,7 @@ Gem adds custom `Upload` type to your GraphQL types.
 Use `ApolloUploadServer::Upload` type for your file as input field:
 
 ```ruby
-  input_field :file, ApolloUploadServer::Upload
+  field :file, ApolloUploadServer::Upload
 ```
 
 That's all folks!
